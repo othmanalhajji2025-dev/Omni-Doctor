@@ -11,6 +11,10 @@ Target: Web Application → PWA → Capacitor → Android APK → iOS
 Architecture: Modular Full-Stack / AI Gateway / Clinical Safety / Controlled Agents / RAG / Healthcare Directory / Security & Resilience
 Status: Master Product & Technical Specification
 Purpose: Source-of-truth architecture for rebuilding and incrementally implementing OmniDoctor AI without deleting previously defined systems, APIs, integrations, configuration targets, or architectural decisions.
+
+System native language: Arabic (العربية).
+Supported languages: All languages (global) — full internationalization (i18n) support; user-visible UI and content must be localizable into any language, with Arabic as the default/native locale.
+
 1. MASTER PRODUCT VISION
 OmniDoctor AI is not a simple chatbot.
 It is a modular global healthcare operating platform combining:
@@ -692,22 +696,7 @@ Existing Android Native TextToSpeech implementation must remain supported.
 42. GLOBAL LANGUAGE ENGINE
 Automatic language detection.
 Supported/documented languages:
-• Arabic
-• English
-• French
-• Spanish
-• German
-• Turkish
-• Chinese
-• Hindi
-• Urdu
-• Persian
-• Russian
-• Swahili
-• Indonesian
-• Italian
-• Portuguese
-• Japanese
+• All languages (global). Arabic is the native/default system language and the primary authored locale.
 43. ARABIC DIALECT ENGINE
 Support:
 • Modern Standard Arabic
@@ -1096,7 +1085,7 @@ Do not unnecessarily store:
 • personal health information
 • identifying information
 • voice recordings
-• sensitive documents
+�� sensitive documents
 unless required and explicitly authorized.
 Provide:
 • Delete conversation
@@ -1109,7 +1098,7 @@ Provide:
 80. OMNISHIELD SECURITY & RESILIENCE ARCHITECTURE v2.0
 OmniShield Security Engine is a dedicated central security layer.
 It sits between:
-User ↓ Frontend ↓ API Gateway ↓ Security Layer ↓ Clinical Safety ↓ AI / Tools ↓ External APIs 
+User ↓ FrontEND ↓ API Gateway ↓ Security Layer ↓ Clinical Safety ↓ AI / Tools ↓ External APIs 
 OmniShield includes:
 • WAF
 • DDoS protection
