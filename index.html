@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Omni Doctor - منصة دعم القرار السريري بالذكاء الاصطناعي">
+<title>Omni Doctor</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#142033;--muted:#687386;--primary:#1457d9;--primary2:#0d3e9c;--danger:#b42318;--dangerbg:#fff0ee;--ok:#087443;--line:#e1e7ef;--shadow:0 16px 50px rgba(20,32,51,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:22px}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1457d9,#58a6ff);display:grid;place-items:center;color:white;font-weight:900;font-size:23px}
+h1,h2,h3{margin-top:0}.brand h1{margin:0}.brand p{margin:3px 0;color:var(--muted);font-size:13px}
+.btn{border:0;border-radius:11px;padding:11px 16px;background:var(--primary);color:#fff;font-weight:700}.btn:hover{background:var(--primary2)}.btn.secondary{background:#eaf0f8;color:var(--ink)}.btn.danger{background:#a82b22}
+.grid{display:grid;grid-template-columns:280px 1fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:20px}
+.sidebar button{width:100%;text-align:start;margin:5px 0;background:#f6f8fb;color:var(--ink)}
+.sidebar button.active{background:#e9f0ff;color:#0d3e9c}
+.notice{background:#fff8df;border:1px solid #f0dc93;border-radius:13px;padding:13px;margin-bottom:18px}
+.form{display:grid;gap:11px}.form input,.form textarea,.form select{width:100%;border:1px solid #d5dce7;border-radius:10px;padding:12px;background:#fff}.form textarea{min-height:150px;resize:vertical}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:7px 10px;background:#edf2f8;border-radius:999px;font-size:13px}
+.result{border-right:4px solid var(--primary);margin-top:16px}.dangerbox{background:var(--dangerbg);border:1px solid #f1b7b0;color:var(--danger);border-radius:12px;padding:13px}.success{background:#eaf8f0;color:var(--ok);padding:12px;border-radius:11px}
+.muted{color:var(--muted)}.hidden{display:none}.small{font-size:12px}.doctor{display:flex;gap:13px;padding:13px;border:1px solid var(--line);border-radius:12px;margin:9px 0}.avatar{width:44px;height:44px;border-radius:50%;background:#e9f0ff;display:grid;place-items:center;color:#1457d9;font-weight:800}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.sidebar{order:2}header{align-items:flex-start}.app{padding:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="brand"><div class="logo">OD</div><div><h1>Omni Doctor</h1><p id="tagline">منصة دعم القرار السريري</p></div></div>
+<div><button class="btn secondary" id="langBtn">English</button> <button class="btn" id="logoutBtn" style="display:none">خروج</button></div>
+</header>
+
+<div class="notice">⚠️ <b id="safety">تنبيه:</b> هذه نسخة ويب تجريبية. لا تقدم تشخيصًا نهائيًا ولا تستبدل الطبيب. في حالات الطوارئ اطلب رعاية طبية عاجلة.</div>
+
+<section id="auth" class="card">
+<h2 id="authTitle">إنشاء حساب / دخول</h2>
+<div class="chips" style="margin-bottom:12px">
+<button class="btn secondary role active" data-role="patient">مريض</button>
+<button class="btn secondary role" data-role="physician">طبيب</button>
+<button class="btn secondary role" data-role="student">طالب</button>
+</div>
+<div class="form">
+<input id="name" placeholder="الاسم">
+<input id="phone" placeholder="رقم الهاتف">
+<input id="country" placeholder="الدولة" value="Yemen">
+<input id="region" placeholder="المنطقة / المدينة">
+<input id="password" type="password" placeholder="كلمة المرور (8 أحرف على الأقل)">
+<div class="row"><button class="btn" id="register">إنشاء حساب</button><button class="btn secondary" id="login">دخول</button></div>
+<p id="authMsg" class="muted"></p>
+</div>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="grid">
+<aside class="card sidebar">
+<h3 id="menuTitle">لوحة التحكم</h3>
+<button class="btn active nav" data-page="home">🏠 الرئيسية</button>
+<button class="btn nav" data-page="clinical">🩺 التقييم السريري</button>
+<button class="btn nav" data-page="doctors">👨‍⚕️ الأطباء</button>
+<button class="btn nav" data-page="education">🎓 التعليم الطبي</button>
+<button class="btn nav" data-page="cases">📋 حالاتي</button>
+</aside>
+
+<main>
+<section id="home" class="card page">
+<h2 id="welcome">مرحبًا بك في Omni Doctor</h2>
+<p class="muted">اختر الخدمة التي تريد استخدامها.</p>
+<div class="chips"><span class="chip">عربي / English</span><span class="chip">صوت مستقبلاً</span><span class="chip">Evidence-based</span><span class="chip">Clinical Safety</span></div>
+</section>
+
+<section id="clinical" class="card page hidden">
+<h2>🩺 التقييم السريري</h2>
+<p class="muted">أدخل الأعراض وسيساعدك النظام على تنظيم المعلومات وعرض احتمالات عامة وعلامات الخطر.</p>
+<div class="form">
+<textarea id="symptoms" placeholder="مثال: لدي صداع منذ يومين مع غثيان..."></textarea>
+<div class="row">
+<input id="duration" placeholder="المدة">
+<select id="severity"><option value="">شدة الأعراض</option><option>خفيفة</option><option>متوسطة</option><option>شديدة</option></select>
+</div>
+<button class="btn" id="analyze">تحليل الحالة</button>
+</div>
+<div id="clinicalResult"></div>
+</section>
+
+<section id="doctors" class="card page hidden">
+<h2>👨‍⚕️ دليل الأطباء</h2>
+<p class="muted">هذه بيانات تجريبية. في النسخة الإنتاجية سيتم الاعتماد على التحقق من الترخيص والمصادر الرسمية.</p>
+<div class="doctor"><div class="avatar">د</div><div><b>طبيب تجريبي</b><div class="muted">طب باطني • اليمن • تحقق مطلوب</div></div></div>
+<div class="doctor"><div class="avatar">د</div><div><b>Physician Demo</b><div class="muted">Internal Medicine • USA • Verification required</div></div></div>
+</section>
+
+<section id="education" class="card page hidden">
+<h2>🎓 التعليم الطبي</h2>
+<p>وضع تعليمي منفصل للطلاب. الحالات هنا محاكاة وليست ملفات مرضى حقيقية.</p>
+<div class="success">يمكن في V3.1 إضافة حالات سريرية تعليمية، أسئلة متدرجة، ومراجع معتمدة.</div>
+</section>
+
+<section id="cases" class="card page hidden">
+<h2>📋 حالاتي</h2>
+<div id="caseList" class="muted">لا توجد حالات محفوظة في هذه النسخة.</div>
+</section>
+</main>
+</div>
+</section>
+<footer>Omni Doctor • MVP Web • لا تستخدم هذه النسخة مع بيانات صحية حقيقية</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let state=JSON.parse(localStorage.getItem("omni_user")||"null");
+let role="patient", lang="ar";
+
+const dictionaries={
+ ar:{tagline:"منصة دعم القرار السريري",safety:"تنبيه:",logout:"خروج",auth:"إنشاء حساب / دخول",name:"الاسم",phone:"رقم الهاتف",country:"الدولة",region:"المنطقة / المدينة",password:"كلمة المرور (8 أحرف على الأقل)",register:"إنشاء حساب",login:"دخول"},
+ en:{tagline:"Clinical Decision Support Platform",safety:"Notice:",logout:"Logout",auth:"Register / Login",name:"Name",phone:"Phone",country:"Country",region:"Region / City",password:"Password (8+ characters)",register:"Register",login:"Login"}
+};
+
+function applyLang(){
+ const d=dictionaries[lang];
+ $("tagline").textContent=d.tagline;$("safety").textContent=d.safety;$("logoutBtn").textContent=d.logout;
+ $("authTitle").textContent=d.auth;$("name").placeholder=d.name;$("phone").placeholder=d.phone;$("country").placeholder=d.country;$("region").placeholder=d.region;$("password").placeholder=d.password;
+ $("register").textContent=d.register;$("login").textContent=d.login;$("langBtn").textContent=lang==="ar"?"English":"العربية";
+ document.documentElement.lang=lang;document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+}
+applyLang();
+
+document.querySelectorAll(".role").forEach(b=>b.onclick=()=>{document.querySelectorAll(".role").forEach(x=>x.classList.remove("active"));b.classList.add("active");role=b.dataset.role});
+
+$("langBtn").onclick=()=>{lang=lang==="ar"?"en":"ar";applyLang()};
+
+function enter(){
+ $("auth").classList.add("hidden");$("dashboard").classList.remove("hidden");$("logoutBtn").style.display="inline-block";
+ $("welcome").textContent=(lang==="ar"?"مرحبًا ":"Welcome ")+(state?.name||"");
+}
+if(state) enter();
+
+$("register").onclick=()=>{
+ const name=$("name").value.trim(),phone=$("phone").value.trim(),password=$("password").value;
+ if(name.length<2||phone.length<5||password.length<8){$("authMsg").textContent=lang==="ar"?"أكمل البيانات وتأكد أن كلمة المرور 8 أحرف على الأقل.":"Complete the fields and use an 8+ character password.";return}
+ state={name,phone,country:$("country").value,region:$("region").value,role,createdAt:new Date().toISOString()};
+ localStorage.setItem("omni_user",JSON.stringify(state));
+ $("authMsg").textContent=lang==="ar"?"تم إنشاء الحساب محليًا في المتصفح.":"Account created locally in this browser.";
+ enter();
+};
+
+$("login").onclick=()=>{
+ const saved=JSON.parse(localStorage.getItem("omni_user")||"null");
+ if(!saved||saved.phone!==$("phone").value){$("authMsg").textContent=lang==="ar"?"لا يوجد حساب تجريبي بهذا الرقم. أنشئ حسابًا أولاً.":"No demo account found for this phone. Register first.";return}
+ state=saved;enter();
+};
+
+$("logoutBtn").onclick=()=>{localStorage.removeItem("omni_user");state=null;location.reload()};
+
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+ document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));$(b.dataset.page).classList.remove("hidden");
+});
+
+const redFlags=[
+ ["chest pain","ألم صدر"],["ألم صدر","ألم صدر"],["difficulty breathing","صعوبة التنفس"],["صعوبة التنفس","صعوبة التنفس"],
+ ["shortness of breath","ضيق التنفس"],["ضيق التنفس","ضيق التنفس"],["fainting","إغماء"],["إغماء","إغماء"],
+ ["severe bleeding","نزيف شديد"],["نزيف شديد","نزيف شديد"],["stroke","أعراض قد تشير إلى سكتة"],["سكتة","أعراض قد تشير إلى سكتة"],
+ ["suicidal","أفكار انتحارية"],["انتحار","أفكار انتحارية"]
+];
+
+$("analyze").onclick=()=>{
+ const s=$("symptoms").value.trim().toLowerCase();
+ if(!s){$("clinicalResult").innerHTML='<div class="dangerbox">اكتب الأعراض أولاً.</div>';return}
+ const flags=[...new Set(redFlags.filter(x=>s.includes(x[0])).map(x=>x[1]))];
+ let conditions=[];
+ if(s.includes("صداع")||s.includes("headache")) conditions=["صداع توتري","صداع نصفي","أسباب أخرى للصداع"];
+ if(s.includes("سعال")||s.includes("كحة")||s.includes("cough")) conditions=["عدوى تنفسية علوية","تفاقم الربو","أسباب تنفسية أخرى"];
+ if(s.includes("بطن")||s.includes("مغص")||s.includes("abdominal")) conditions=["أسباب هضمية","أسباب بولية","أسباب أخرى لألم البطن"];
+ if(!conditions.length) conditions=["المعلومات غير كافية لبناء قائمة احتمالات مركزة"];
+ const emergency=flags.length>0;
+ $("clinicalResult").innerHTML=`
+ <div class="result">
+ ${emergency?'<div class="dangerbox"><b>🚨 علامة خطر محتملة:</b> يلزم طلب تقييم طبي عاجل. لا يمكن للنظام تحديد سبب الحالة.</div>':''}
+ <h3>الاحتمالات العامة</h3><ul>${conditions.map(x=>`<li>${x}</li>`).join("")}</ul>
+ <h3>معلومات يفضل جمعها</h3><ul><li>الأدوية الحالية</li><li>الحساسيات</li><li>التاريخ المرضي</li><li>العلامات الحيوية عند توفرها</li></ul>
+ <h3>الخطوة التالية</h3><p>${emergency?"اطلب رعاية طبية عاجلة.":"استكمال التاريخ المرضي ومراجعة طبيب عند الحاجة."}</p>
+ <h3>مصدر منهجي</h3><p><a target="_blank" href="https://www.who.int/publications/i/item/9789240029200">WHO — Ethics and Governance of AI for Health</a></p>
+ <small class="muted">هذه ليست نتيجة تشخيص نهائية ولا وصفة علاجية.</small>
+ </div>`;
+ const cases=JSON.parse(localStorage.getItem("omni_cases")||"[]");
+ cases.unshift({date:new Date().toLocaleString(),symptoms:$("symptoms").value,result:conditions,flags});
+ localStorage.setItem("omni_cases",JSON.stringify(cases.slice(0,30)));
+ renderCases();
+};
+
+function renderCases(){
+ const cases=JSON.parse(localStorage.getItem("omni_cases")||"[]");
+ $("caseList").innerHTML=cases.length?cases.map(c=>`<div class="doctor"><div class="avatar">🩺</div><div><b>${c.date}</b><div>${c.symptoms}</div><div class="muted">${c.result.join(" • ")}</div></div></div>`).join(""):"لا توجد حالات محفوظة في هذه النسخة.";
+}
+renderCases();
+</script>
+</body>
+</html>
